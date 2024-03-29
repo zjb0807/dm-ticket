@@ -1,6 +1,6 @@
 use anyhow::Result;
 use serde::{Deserialize, Serialize};
-use serde_json::Value;
+use serde_json::{json, Value};
 
 use super::CommonParams;
 
@@ -14,12 +14,12 @@ pub struct TicketInfoForm {
 }
 
 impl TicketInfoForm {
-    pub fn build(ticket_id: String) -> Result<Value> {
+    pub fn build(ticket_id: &String) -> Result<Value> {
         let data = Self {
-            item_id: ticket_id,
+            item_id: ticket_id.to_string(),
             dm_channel: "damai@damaih5_h5",
         };
-        Ok(serde_json::to_value(&data)?)
+        Ok(serde_json::to_value(data)?)
     }
 }
 
@@ -78,6 +78,9 @@ pub struct TicketDetail {
     #[serde(rename = "sellStartTime")]
     pub sell_start_timestamp: String,
 
+    #[serde(rename = "buyBtnText")]
+    pub buy_btn_text: String,
+
     #[serde(rename = "sellStartTimeStr")]
     pub sell_start_time_str: String,
 
@@ -121,4 +124,45 @@ pub struct DetailViewComponentMap {
 pub struct TicketInfo {
     #[serde(rename = "detailViewComponentMap")]
     pub detail_view_component_map: DetailViewComponentMap,
+}
+
+pub struct GetTicketListParams;
+impl GetTicketListParams {
+    pub fn build() -> Result<Value> {
+        let mut params = serde_json::to_value(CommonParams::build())?;
+        params["api"] = "mtop.damai.wireless.search.broadcast.list".into();
+        params["v"] = "1.0".into();
+        Ok(params)
+    }
+}
+
+pub struct GetTicketListForm;
+impl GetTicketListForm {
+    pub fn build() -> Result<Value> {
+        Ok(json!({
+            "cityId": "0",
+            "topProjectId": null,
+            "dmChannel": "damai@damaih5_h5"
+        }))
+    }
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct Ticket {
+    #[serde(rename = "categoryName")]
+    pub category_name: String,
+
+    #[serde(rename = "name")]
+    pub ticket_name: String,
+
+    #[serde(rename = "itemId")]
+    pub ticket_id: usize,
+
+    #[serde(rename = "upTime")]
+    pub sale_time: usize,
+}
+
+#[derive(Serialize, Deserialize, Debug)]
+pub struct TicketList {
+    pub items: Vec<Ticket>,
 }

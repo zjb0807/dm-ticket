@@ -4,7 +4,7 @@ use serde_json::{json, Value};
 
 use super::CommonParams;
 
-pub struct PerformParams {}
+pub struct PerformParams;
 
 impl PerformParams {
     pub fn build() -> Result<Value> {
@@ -16,9 +16,9 @@ impl PerformParams {
     }
 }
 
-pub struct PerformForm {}
+pub struct PerformForm;
 impl PerformForm {
-    pub fn build(ticket_id: String, perform_id: String) -> Result<Value> {
+    pub fn build(ticket_id: &String, perform_id: &String) -> Result<Value> {
         let ex_params = json!({
             "dataType": 2,
             "dataId": perform_id,
@@ -48,6 +48,9 @@ pub struct Sku {
     #[serde(rename = "priceName")]
     pub price_name: String,
 
+    #[serde(rename = "skuSalable")]
+    pub sku_salable: String,
+
     pub price: String,
 }
 
@@ -66,4 +69,17 @@ pub struct Perform {
 #[derive(Serialize, Deserialize, Debug)]
 pub struct PerformInfo {
     pub perform: Perform,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct PerformItem {
+    pub perfrom_name: String,
+    pub perform_id: String,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct SkuItem {
+    pub sku_id: String,
+    #[serde(rename = "price_name")]
+    pub sku_name: String,
 }

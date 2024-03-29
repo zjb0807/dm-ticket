@@ -4,9 +4,8 @@ use serde_json::{json, Value};
 
 use super::CommonParams;
 
+// 大麦生成订单接口params
 pub struct OrderParams;
-
-// 生成订单的请求参数
 impl OrderParams {
     pub fn build() -> Result<Value> {
         let mut params = serde_json::to_value(CommonParams::build())?;
@@ -46,16 +45,13 @@ impl OrderForm {
     }
 }
 
-#[derive(Serialize, Deserialize, Debug)]
-pub struct OrderInfoContainer {}
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct OrderInfoContainer;
 
-#[derive(Serialize, Deserialize, Debug)]
-pub struct OrderInfoData {}
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct OrderInfoData;
 
-#[derive(Serialize, Deserialize, Debug)]
-pub struct OrderInfoEndpoint {}
-
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct OrderInfoGlobal {
     #[serde(rename = "secretKey")]
     pub secret_key: String,
@@ -64,7 +60,7 @@ pub struct OrderInfoGlobal {
     pub secret_value: String, // submitref
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct OrderInfoHierarchy {
     pub component: Vec<String>,
     pub root: String,
@@ -75,7 +71,7 @@ pub struct OrderInfoHierarchy {
     pub structure: Value,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct OrderInfoLinkageCommon {
     #[serde(rename = "queryParams")]
     pub query_params: String,
@@ -91,7 +87,7 @@ pub struct OrderInfoLinkageCommon {
     pub submit_params: String,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct OrderInfoLinkage {
     pub input: Vec<String>,
     pub request: Vec<String>,
@@ -99,18 +95,18 @@ pub struct OrderInfoLinkage {
     pub common: OrderInfoLinkageCommon,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct OrderInfo {
     // pub container: OrderInfoContainer,
     pub data: Value,
-    pub endpoint: OrderInfoEndpoint,
+    //pub endpoint: OrderInfoEndpoint,
     pub global: OrderInfoGlobal,
     pub hierarchy: OrderInfoHierarchy,
     pub linkage: OrderInfoLinkage,
 }
 
+// 提交订单params
 pub struct SubmitOrderParams;
-
 impl SubmitOrderParams {
     pub fn build(submitref: String) -> Result<Value> {
         let mut params = serde_json::to_value(CommonParams::build())?;
